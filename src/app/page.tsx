@@ -47,12 +47,12 @@ export default function HomePage() {
         <h1 className="font-extrabold tracking-tight text-white sm:text-xl">
           Current
         </h1>
-        <DutyView date={current.date} duties={current.duties} />
-          {}
+        {current && <DutyView date={current.date} duties={current.duties} />}
+          
           <h1 className="font-extrabold tracking-tight text-white sm:text-xl">
             Older
           </h1>
-          {older.forEach((c) =>  <DutyView date={c.date} duties={c.duties} />)}
+          {older && older.map((c) =>  <DutyView date={c.date} duties={c.duties} />)}
       </div>
     </main>
   );
