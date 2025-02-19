@@ -52,7 +52,7 @@ export default function HomePage() {
           <h1 className="font-extrabold tracking-tight text-white sm:text-xl">
             Older
           </h1>
-          {older && older.map((c) =>  <DutyView date={c.date} duties={c.duties} />)}
+          {older.map((c) =>  <DutyView date={c.date} duties={c.duties} />)}
       </div>
     </main>
   );
