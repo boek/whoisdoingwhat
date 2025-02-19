@@ -2,16 +2,22 @@ const CYCLE_LENGTH_DAYS = 28;
 const DAY_TO_MS = 24 * 60 * 60 * 1000;
 const CYCLE_LENGTH_MS = CYCLE_LENGTH_DAYS * DAY_TO_MS;
 
-const Oreo = "Oreo"
-const Gingerbread = "Gingerbread"
-const KitKat = "KitKat"
-const PetitFour = "PetitFour"
-const Triage = "Triage"
-const Beta = "Beta"
-const Health = "Health"
+export const Oreo = "Oreo";
+export const Gingerbread = "Gingerbread";
+export const KitKat = "KitKat";
+export const PetitFour = "PetitFour";
 
-type Squad = Oreo | Gingerbread | KitKat | PetitFour
-type Duty = Triage | Beta | Health
+export const Triage = "Triage";
+export const Beta = "Beta";
+export const Health = "Health";
+
+export type Squad = "Oreo" | "Gingerbread" | "KitKat" | "PetitFour";
+export type Duty = "Triage" | "Beta" | "Health";
+
+export type WhenAndWho = {
+	date: string,
+	duties: Record<Duty, Squad>
+}
 
 const allSquads: [Squad] = [Oreo, Gingerbread, KitKat, PetitFour]
 
@@ -56,14 +62,14 @@ export function dates() {
 	return getCycleDates(dateSeed, CYCLE_LENGTH_MS)
 }
 
-export function whoIsDoingWhat() {
+export function whoIsDoingWhat(): [WhenAndWho] {
 	const d = dates()
 	let currentDuty = dutySeed
-	let list = []
+	const list = []
 	for (const date of d) {
 		list.push({
 			date,
-			currentDuty
+			duties: currentDuty
 		})
 		currentDuty = next(currentDuty)
 	}

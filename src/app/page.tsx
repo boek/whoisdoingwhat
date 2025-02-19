@@ -1,35 +1,34 @@
-import Link from "next/link";
-import { whoIsDoingWhat } from "~/utils/cycle"
+import { Triage, Health, Beta, whoIsDoingWhat } from "~/utils/cycle"
 
-function humanReadableDate(dateAsString : string) {
-  const date = new Date(dateAsString);
-  
-  const options = { month: "long", day: "numeric", year: "numeric" };
-  const formattedDate = new Intl.DateTimeFormat("en-US", options).format(date);
-  
-  // Add ordinal suffix
-  const day = date.getDate();
-  const suffix = (day) => {
-    if (day > 3 && day < 21) return "th";
-    switch (day % 10) {
-      case 1: return "st";
-      case 2: return "nd";
-      case 3: return "rd";
-      default: return "th";
-    }
-  };
-  
-  return formattedDate.replace(/\d+/, day + suffix(day))
-}
+// function humanReadableDate(dateAsString : string) {
+//   const date = new Date(dateAsString);
+//   
+//   const options = { month: "long", day: "numeric", year: "numeric" };
+//   const formattedDate = new Intl.DateTimeFormat("en-US", options).format(date);
+//   
+//   // Add ordinal suffix
+//   const day = date.getDate();
+//   const suffix = (day) => {
+//     if (day > 3 && day < 21) return "th";
+//     switch (day % 10) {
+//       case 1: return "st";
+//       case 2: return "nd";
+//       case 3: return "rd";
+//       default: return "th";
+//     }
+//   };
+//   
+//   return formattedDate.replace(/\d+/, day + suffix(day))
+// }
 
-function DutyView({ date, duties }) {
+function DutyView({ date, duties }: WhenAndWho) {
   console.log(duties)
   return (
     <div className="rounded-lg border bg-card text-card-foreground shadow-s p-8 bg-white text-black">
       <ul>
-        <li><strong>General Triage:</strong> {duties.Triage}</li>
-        <li><strong>Health Monitoring:</strong> {duties.Health}</li>
-        <li><strong>Beta Cut:</strong> {duties.Beta}</li>
+        <li><strong>General Triage:</strong> {duties[Triage]}</li>
+        <li><strong>Health Monitoring:</strong> {duties[Health]}</li>
+        <li><strong>Beta Cut:</strong> {duties[Beta]}</li>
       </ul>
     </div>
   )
@@ -48,12 +47,12 @@ export default function HomePage() {
         <h1 className="font-extrabold tracking-tight text-white sm:text-xl">
           Current
         </h1>
-        <DutyView date={current.date} duties={current.currentDuty} />
+        <DutyView date={current.date} duties={current.duties} />
           {}
           <h1 className="font-extrabold tracking-tight text-white sm:text-xl">
             Older
           </h1>
-          {older.forEach((c) =>  <DutyView date={c.date} duties={c.currentDuty} />)}
+          {older.forEach((c) =>  <DutyView date={c.date} duties={c.duties} />)}
       </div>
     </main>
   );
