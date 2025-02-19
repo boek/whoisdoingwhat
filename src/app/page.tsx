@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { whoIsDoingWhat } from "~/utils/cycle.ts"
+import { whoIsDoingWhat } from "~/utils/cycle"
 
 function humanReadableDate(dateAsString) {
   const date = new Date(dateAsString);
