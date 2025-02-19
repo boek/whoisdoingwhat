@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { whoIsDoingWhat } from "~/utils/cycle"
 
-function humanReadableDate(dateAsString) {
+function humanReadableDate(dateAsString : string) {
   const date = new Date(dateAsString);
   
   const options = { month: "long", day: "numeric", year: "numeric" };
