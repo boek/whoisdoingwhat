@@ -19,10 +19,10 @@ export type WhenAndWho = {
 	duties: Record<Duty, Squad>
 }
 
-const allSquads: [Squad] = [Oreo, Gingerbread, KitKat, PetitFour]
+const allSquads: Squad[] = ["Oreo", "Gingerbread", "KitKat", "PetitFour"]
 
 const dateSeed = "2025-02-19"
-const dutySeed = {
+const dutySeed: Record<Duty, Squad> = {
 	Triage : KitKat,
 	Health : PetitFour,
 	Beta : KitKat
@@ -31,7 +31,8 @@ const dutySeed = {
 function next(current: Record<Duty, Squad>): Record<Duty, Squad> {
   const getNextSquad = (squad: Squad): Squad => {
 	const currentIndex = allSquads.indexOf(squad);
-	return allSquads[(currentIndex + 1) % allSquads.length];
+	const retval = allSquads[(currentIndex + 1) % allSquads.length] ?? "Oreo"
+	return retval;
   };
 
   return {
@@ -49,11 +50,11 @@ function getCycleDates(seedDate: string, cycleLengthMs: number): string[] {
   let currentDate = startDate;
 
   while (currentDate <= today) {
-	dates.push(new Date(currentDate).toISOString().split("T")[0]);
+	dates.push(new Date(currentDate).toISOString().split("T")[0] ?? "");
 	currentDate += cycleLengthMs;
   }
   
-  dates.push(new Date(currentDate).toISOString().split("T")[0]);
+  dates.push(new Date(currentDate).toISOString().split("T")[0] ?? "");
 
   return dates;
 }
@@ -62,7 +63,7 @@ export function dates() {
 	return getCycleDates(dateSeed, CYCLE_LENGTH_MS)
 }
 
-export function whoIsDoingWhat(): [WhenAndWho] {
+export function whoIsDoingWhat(): WhenAndWho[] {
 	const d = dates()
 	let currentDuty = dutySeed
 	const list = []
