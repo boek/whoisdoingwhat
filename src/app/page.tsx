@@ -1,36 +1,63 @@
 import Link from "next/link";
+import { whoIsDoingWhat } from "~/utils/cycle.ts"
+
+function humanReadableDate(dateAsString) {
+  const date = new Date(dateAsString);
+  
+  const options = { month: "long", day: "numeric", year: "numeric" };
+  const formattedDate = new Intl.DateTimeFormat("en-US", options).format(date);
+  
+  // Add ordinal suffix
+  const day = date.getDate();
+  const suffix = (day) => {
+    if (day > 3 && day < 21) return "th";
+    switch (day % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  };
+  
+  return formattedDate.replace(/\d+/, day + suffix(day))
+}
+
+function DutyView({ date, duties }) {
+  console.log(duties)
+  return (
+    <div className="rounded-lg border bg-card text-card-foreground shadow-s p-8 bg-white text-black">
+      <h3 className="text-2xl font-semibold leading-none tracking-tight flex items-center gap-2 text-black ">📅 {humanReadableDate(date)}</h3>
+      <ul>
+        <li><strong>Triage:</strong> {duties.Triage}</li>
+        <li><strong>Health Monitoring:</strong> {duties.Health}</li>
+        <li><strong>Beta Cut:</strong> {duties.Beta}</li>
+      </ul>
+    </div>
+  )
+}
 
 export default function HomePage() {
+  const [upNext, ...others] = whoIsDoingWhat().reverse()
+  const [current, ...older] = others
+  console.log(upNext)
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-orange-400 to-orange-100 text-white">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
         <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-          Who is <span className="text-[hsl(280,100%,70%)]">Doing</span> What
+          Who is <span className="text-orange-800">Doing</span> What
         </h1>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-            href="https://create.t3.gg/en/usage/first-steps"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">First Steps →</h3>
-            <div className="text-lg">
-              Just the basics - Everything you need to know to set up your
-              database and authentication.
-            </div>
-          </Link>
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-            href="https://create.t3.gg/en/introduction"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">Documentation →</h3>
-            <div className="text-lg">
-              Learn more about Create T3 App, the libraries it uses, and how to
-              deploy it.
-            </div>
-          </Link>
-        </div>
+        <h1 className="font-extrabold tracking-tight text-white sm:text-xl">
+          Up next
+        </h1>
+        <DutyView date={upNext.date} duties={upNext.currentDuty} />
+        <h1 className="font-extrabold tracking-tight text-white sm:text-xl">
+          Current
+        </h1>
+        <DutyView date={current.date} duties={current.currentDuty} />
+          <h1 className="font-extrabold tracking-tight text-white sm:text-xl">
+            Older
+          </h1>
+          {older.forEach((c) =>  <DutyView date={c.date} duties={c.currentDuty} />)}
       </div>
     </main>
   );
