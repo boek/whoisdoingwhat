@@ -1,11 +1,19 @@
-import { Triage, Health, Beta, whoIsDoingWhat, WhenAndWho } from "~/utils/cycle"
+export const dynamic = "force-static";
+
+import {
+  Triage,
+  Health,
+  Beta,
+  whoIsDoingWhat,
+  WhenAndWho,
+} from "~/utils/cycle";
 
 // function humanReadableDate(dateAsString : string) {
 //   const date = new Date(dateAsString);
-//   
+//
 //   const options = { month: "long", day: "numeric", year: "numeric" };
 //   const formattedDate = new Intl.DateTimeFormat("en-US", options).format(date);
-//   
+//
 //   // Add ordinal suffix
 //   const day = date.getDate();
 //   const suffix = (day) => {
@@ -17,27 +25,32 @@ import { Triage, Health, Beta, whoIsDoingWhat, WhenAndWho } from "~/utils/cycle"
 //       default: return "th";
 //     }
 //   };
-//   
+//
 //   return formattedDate.replace(/\d+/, day + suffix(day))
 // }
 
 function DutyView({ date, duties }: WhenAndWho) {
-  console.log(duties)
   return (
-    <div className="rounded-lg border bg-card text-card-foreground shadow-s p-8 bg-white text-black">
+    <div className="bg-card text-card-foreground shadow-s rounded-lg border bg-white p-8 text-black">
       <ul>
-        <li><strong>General Triage:</strong> {duties[Triage]}</li>
-        <li><strong>Health Monitoring:</strong> {duties[Health]}</li>
-        <li><strong>Beta Cut:</strong> {duties[Beta]}</li>
+        <li>
+          <strong>General Triage:</strong> {duties[Triage]}
+        </li>
+        <li>
+          <strong>Health Monitoring:</strong> {duties[Health]}
+        </li>
+        <li>
+          <strong>Beta Cut:</strong> {duties[Beta]}
+        </li>
       </ul>
     </div>
-  )
+  );
 }
 
 export default function HomePage() {
-  const [upNext, ...others] = whoIsDoingWhat().reverse()
-  const [current, ...older] = others
-  console.log(upNext)
+  const [upNext, ...others] = whoIsDoingWhat().reverse();
+  const [current, ...older] = others;
+  console.log(upNext);
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-green-400 to-green-100 text-white">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
@@ -48,11 +61,13 @@ export default function HomePage() {
           Current
         </h1>
         {current && <DutyView date={current.date} duties={current.duties} />}
-          
-          <h1 className="font-extrabold tracking-tight text-white sm:text-xl">
-            Older
-          </h1>
-          {older.map((c) =>  <DutyView key={c.date} date={c.date} duties={c.duties} />)}
+
+        <h1 className="font-extrabold tracking-tight text-white sm:text-xl">
+          Older
+        </h1>
+        {older.map((c) => (
+          <DutyView key={c.date} date={c.date} duties={c.duties} />
+        ))}
       </div>
     </main>
   );
